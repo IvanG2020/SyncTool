@@ -1,6 +1,8 @@
 ### **Tutorial: How to Set Up and Use the NetSuite & Azure DevOps Sync Tool**
 
 This tutorial will guide you through the steps needed to set up, configure, and use the Python-based NetSuite & Azure DevOps Sync Tool.
+![image](https://github.com/user-attachments/assets/d3d4247c-6f33-4500-86eb-ac4b11a082b7)
+
 
 ---
 
