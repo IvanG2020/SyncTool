@@ -1,0 +1,771 @@
+<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Author>NetSuite</Author>
+  <LastAuthor>NetSuite</LastAuthor>
+  <Company>NetSuite</Company>
+  <Version>16.00</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>11740</WindowHeight>
+  <WindowWidth>25600</WindowWidth>
+  <WindowTopX>32767</WindowTopX>
+  <WindowTopY>32767</WindowTopY>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Arial" x:Family="Swiss" ss:Size="8"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s62">
+   <Alignment ss:Horizontal="Center" ss:Vertical="Bottom"/>
+   <Font ss:FontName="Arial" x:Family="Swiss" ss:Size="7" ss:Bold="1"/>
+   <Interior ss:Color="#D0D0D0" ss:Pattern="Solid"/>
+  </Style>
+  <Style ss:ID="s63">
+   <NumberFormat ss:Format="Short Date"/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Cases">
+  <Table ss:ExpandedColumnCount="11" ss:ExpandedRowCount="55" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="40"
+   ss:DefaultRowHeight="10.333333333333334">
+   <Column ss:Index="9" ss:Width="40.333333333333336"/>
+   <Column ss:Width="43"/>
+   <Row>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Company</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Number</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Assigned To</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Contact</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Status</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Subject</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Parent Case</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Quick Note</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Target Start Date</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Target Completion Date</Data></Cell>
+    <Cell ss:StyleID="s62"><Data ss:Type="String">Resolution</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">1818</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String">EphraimEichten</Data></Cell>
+    <Cell><Data ss:Type="String">UAT - Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">T &amp; M Detail Issue</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Emailed Eph to see if this is still an open issue</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="DateTime">2023-07-12T00:00:00.000</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="DateTime">2023-10-15T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String">Looked at JC entries and there is no EE# which is required in PR TM entries</Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">1906</Data></Cell>
+    <Cell><Data ss:Type="String">Carpenter, Michael</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">OnHold</Data></Cell>
+    <Cell><Data ss:Type="String">19592- Archkey - Fully Burdened Labor Cost to SF</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">ArchKey is postponing this work.  We will revisit in Feb-Mar. 2024</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">1930</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">19068 - INRS Field Mobile App  - need to see 14 days of history; any status</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="DateTime">2023-09-30T00:00:00.000</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">1975</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">UAT - Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">19676 - MY PO History search filters</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 19 - Prod deployment pushed to 6/7</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2245</Data></Cell>
+    <Cell><Data ss:Type="String">Windham, Aaron L</Data></Cell>
+    <Cell><Data ss:Type="String">Jasen Tveit</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">25951 - Scott Henderson PO's issued for Sachs are being generated under PEC</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2317</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String">Jasen Tveit</Data></Cell>
+    <Cell><Data ss:Type="String">Re-Opened</Data></Cell>
+    <Cell><Data ss:Type="String">27793 - Unable to access Credit/Reference tab on eCMS Customer Record</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">The records have been added and updated as needed</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2360</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">29292 - INRS - line numbering inconsistent and duplicated</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 25</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2364</Data></Cell>
+    <Cell><Data ss:Type="String">Carpenter, Michael</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">29377 - INRS spools at random times</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Aaron believes changes Dennis made last week with the gateway timeout issue should have fixed this. We will keep an eye on this and communicate with the users to verify.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2449</Data></Cell>
+    <Cell><Data ss:Type="String">McGinnis, Darryl K</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">31495 - T&amp;C OFFICE - WORK ORDER BILLING DUPLICATION ISSUE STILL GOING ON 2-8-2024</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">(P5) Check with Darryl</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2493</Data></Cell>
+    <Cell><Data ss:Type="String">Windham, Aaron L</Data></Cell>
+    <Cell><Data ss:Type="String">Brandon Ferrell</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">33914 - Generate PO at click SAVE</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Backlog - Updated title.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2522</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">Archkey - Sprig AR cleanup issues</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Archkey - Sprig cleanup issues</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2595</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">UAT - Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">38569 - Integration issue PO 80653659</Data></Cell>
+    <Cell><Data ss:Type="String">2551 36190 - Research on PO_Detail_Id associated with Item/Product-ARL 840 3/8 MC-BX CONN W/SQR IN PO's</Data></Cell>
+    <Cell><Data ss:Type="String">From FS Ticket - Data is loaded into Salesforce</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2599</Data></Cell>
+    <Cell><Data ss:Type="String">McGinnis, Darryl K</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">38722 (1) - Job Setup in eCMS - Salesforce to eCMS - Responsibility codes</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">(P1) - Reviewed - reassigned to Darryl for next steps.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2600</Data></Cell>
+    <Cell><Data ss:Type="String">McGinnis, Darryl K</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">38722 (2) - Job Setup in eCMS - Salesforce to eCMS - Process overall for insert</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">(P1) - Reviewed - reassigned to Darryl for next steps.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2618</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">39393 - History on job C09235 missing in CM</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">(P2) Reviewing</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2619</Data></Cell>
+    <Cell><Data ss:Type="String">Barnum, Benedict M</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">39358 - SF eCMS Integration Failure</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Special characters in the Description, which I believe may be causing issues with iSeries DB:</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2632</Data></Cell>
+    <Cell><Data ss:Type="String">Tomlinson, Robert L</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">39806 - Setup AKSITQA server</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">This is in progress. Current base applications have been copied over. Configuration and testing is still needed on our side.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2664</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">40667 - Butler Invoice 14986759 Tax code shown in the line but not in the header</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 20 (P2) - Local_Tax_Code is inserting correct to CM from INRS. Kishor will check on Automate side &amp; will let us know. No action item for INRS at this time.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2677</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">Archkey - AP issue with Check #s across files</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case Created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2686</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">38496 - PO error issue</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">This has been moved into sprint 25.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2695</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">41893 - Company Maintenance_Contacts_Invoice-Deficiency list initial upload</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Backlog - Janice (PM from Archkey) is working on collecting the list of contacts &amp; their email addresses. Lesli will get an update on this by end of this week.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2696</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">41754 - INRS Contingency - customized 503 error screen OR other to communicate outage</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Currently in Asana w/ low priority.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2697</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">41219 - Power Automate is splitting the invoices incorrectly and it's missing a page</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Currently in Asana w/ low priority.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2712</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">42956 - INRS Documentation of DB logic and Validation of Power Automate API handshake - Matching Logic</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Currently in Asana w/ low priority.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2726</Data></Cell>
+    <Cell><Data ss:Type="String">Tomlinson, Robert L</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">43896 - INRS QA and Support QA Environment_eCMS Test Refresh</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Pending date confirmation with CGC</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2727</Data></Cell>
+    <Cell><Data ss:Type="String">McGinnis, Darryl K</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">UAT - Waiting on Client</Data></Cell>
+    <Cell><Data ss:Type="String">42938 - eCMS Invoice Integration - Salesforce</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Resolved</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2730</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">43797 - Request addition to the PO Maintenance screen</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2739</Data></Cell>
+    <Cell><Data ss:Type="String">Gwyn, Shannon L</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">37390 - GL change / now timesheet postings not working</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2745</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">44765 - Duplicate Invoice in CM</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2748</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">44821 - WebPO Company List - MFG - Search button inactive</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Target INRS Sprint 25 Release.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2754</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">43506 - Intercompany job is not being push in ECMS</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Currently in Asana w/ high priority.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2762</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">45093 - address population error</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Currently in Asana w/ low priority.</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2774</Data></Cell>
+    <Cell><Data ss:Type="String">Windham, Aaron L</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">12341 - Timesheet entries for ACCT Jobs integrating to wrong company</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2778</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">44348 - Restrict Available Jobs / Sub-Jobs on Mobile App Based on User's Com / Div</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2779</Data></Cell>
+    <Cell><Data ss:Type="String">Molnar, Debi S</Data></Cell>
+    <Cell><Data ss:Type="String">Ross, Monica</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">45641 - Billing line items (expenses) failed to integrate to eCMS</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2787</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">46420 - Include option to open OA file from the PO MAINTENANCE and REQUISITION MAINTENANCE screens</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 25</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2792</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">46542 - PO Number has a leading space in the database</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 25 - QA Passed</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2807</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">47454 - PO History Report - Include Delegates Option</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 25</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2812</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">47617 - Ziptax implementation requirements - INRS</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 25</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2825</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48096 - Error when creating new manufacturer if name matches an existing vendor</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2826</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48101 - Error when creating multiple vendor contacts with the same &quot;Name&quot; or &quot;Email&quot;</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2827</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48116 - INRS Replace UPC to AKS part number</Data></Cell>
+    <Cell><Data ss:Type="String">2757 45067 - Correct UPC in INRS - remove -end check digit; replace leading 0</Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2830</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48156 - INRS Time out</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2834</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48256 - PO with no line items in process status</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2835</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48379 - Failure API message not being captured by INRS</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2844</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Etna Zeneli</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48520 - Pulling Line-Item Details on the Invoice Exception Detail screen and adding it to a PO</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Sprint 26</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2845</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">ArchKey IT</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48630 - Generate PO: flexibility for end user to change PO Type</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2848</Data></Cell>
+    <Cell><Data ss:Type="String">Tomlinson, Robert L</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">In Progress</Data></Cell>
+    <Cell><Data ss:Type="String">Archkey CM migration and eCMS refresh</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2851</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">ArchKey IT</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48660 - Allow editing of the email body for the &quot;Reject&quot; email template</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case Created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2852</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">49473 - Pressing the &quot;Enter&quot; Key Should Perform the &quot;Search&quot; Function</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2853</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Brandon Ferrell</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">49651 - INRS QA Only - Delete ArchKey parts from ITEM DB</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case Created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2856</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Tyler Zahuranec</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">48666 - Allow &quot;Procurement Managers&quot; to edit the &quot;Created By&quot; field on a PO</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2859</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">50048 - Update UPC to AKS part number- Item DB - QA ONLY</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case Created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+   <Row>
+    <Cell><Data ss:Type="String">C00024 ArchKey Solutions</Data></Cell>
+    <Cell><Data ss:Type="String">2864</Data></Cell>
+    <Cell><Data ss:Type="String">Dukes, Traci</Data></Cell>
+    <Cell><Data ss:Type="String">Lesli Digmon</Data></Cell>
+    <Cell><Data ss:Type="String">Not Started</Data></Cell>
+    <Cell><Data ss:Type="String">Integration Issues - INC-50166</Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String">Case created</Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell ss:StyleID="s63"><Data ss:Type="String"></Data></Cell>
+    <Cell><Data ss:Type="String"></Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <Selected/>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>
