@@ -32,12 +32,19 @@ undo_actions = []
 selected_cases = []
 
 def fetch_netsuite_cases():
-    # Example mock data, replace with real API call to NetSuite
-    return [
-        {"id": 123, "title": "Sample Case 1", "status": "Open"},
-        {"id": 124, "title": "Sample Case 2", "status": "Open"},
-        {"id": 125, "title": "Sample Case 3", "status": "Closed"}
-    ]
+    url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase'
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {config["netsuite_token_key"]}'
+    }
+
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        cases = response.json().get('items', [])
+        return [{"id": case["id"], "title": case["title"], "status": case["status"]["name"]} for case in cases]
+    else:
+        print(f"Failed to fetch NetSuite cases: {response.status_code}, {response.text}")
+        return []
 
 def fetch_azure_work_items():
     url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems?api-version=6.0'
@@ -48,7 +55,8 @@ def fetch_azure_work_items():
     
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-        return response.json().get('value', [])
+        work_items = response.json().get('value', [])
+        return [{"id": item["id"], "title": item["fields"]["System.Title"], "status": item["fields"]["System.State"]} for item in work_items]
     else:
         print(f"Failed to fetch work items: {response.status_code}, {response.text}")
         return []
@@ -57,15 +65,15 @@ def create_or_update_azure_work_item(case):
     work_item = None
     azure_work_items = fetch_azure_work_items()
     for item in azure_work_items:
-        if item['fields']['System.Title'] == case['title']:
+        if item['title'] == case['title']:
             work_item = item
             break
 
     mapped_status = reverse_status_mapping.get(case['status'], "New")
 
     if work_item:
-        if case['status'] == 'Closed' and work_item['fields']['System.State'] != 'Closed':
-            original_state = work_item['fields']['System.State']
+        if case['status'] == 'Closed' and work_item['status'] != 'Closed':
+            original_state = work_item['status']
             update_azure_work_item_status(work_item['id'], mapped_status)
             undo_actions.append(("azure", work_item['id'], "System.State", original_state))
             sync_log.append(f"Azure Work Item {work_item['id']} updated to {mapped_status} due to NetSuite case {case['id']} status change.")
@@ -141,10 +149,10 @@ def sync_cases():
         elif sync_direction.get() == 2:  # DevOps to NetSuite
             azure_work_items = fetch_azure_work_items()
             for work_item in azure_work_items:
-                corresponding_case = next((c for c in selected_cases if c['title'] == work_item['fields']['System.Title']), None)
+                corresponding_case = next((c for c in selected_cases if c['title'] == work_item['title']), None)
                 if corresponding_case:
-                    if work_item['fields']['System.State'] == 'Closed' and corresponding_case['status'] != 'Closed':
-                        update_netsuite_case_status(corresponding_case['id'], work_item['fields']['System.State'])
+                    if work_item['status'] == 'Closed' and corresponding_case['status'] != 'Closed':
+                        update_netsuite_case_status(corresponding_case['id'], work_item['status'])
 
         show_sync_result("Sync Complete", "The sync process has completed successfully.")
     except Exception as e:
@@ -302,9 +310,7 @@ def open_case_selection_window():
         # Clear the listbox and repopulate it with the fetched cases
         case_listbox.delete(0, tk.END)
         for i, case in enumerate(cases):
-            title = case['title'] if fetch_source.get() == 1 else case['fields']['System.Title']
-            status = case['status'] if fetch_source.get() == 1 else case['fields']['System.State']
-            case_listbox.insert(tk.END, f"Case {case['id']}: {title} ({status})")
+            case_listbox.insert(tk.END, f"Case {case['id']}: {case['title']} ({case['status']})")
 
         # Update the total cases label
         total_cases_label.config(text=f"Total Cases Fetched: {len(cases)}")
@@ -405,6 +411,7 @@ def open_report_window():
 
     generate_button = tk.Button(report_window, text="Generate Report", command=generate_report, bg="#2980b9", fg="white", font=("Arial", 14))
     generate_button.pack(pady=20)
+
 
 def fetch_netsuite_tickets_by_companies(selected_companies):
     # Replace with real API calls to NetSuite
