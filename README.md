@@ -34,7 +34,7 @@ Before you begin, ensure you have the following:
 1. **Clone or Download the Project:**
    - If you have Git installed, clone the repository:
      ```bash
-     git clone https://github.com/your-repository/netsuite-azure-sync.git
+     git clone https://github.com/IvanG2020/SyncTool.git
      ```
    - Alternatively, download the ZIP file from the repository and extract it.
 
