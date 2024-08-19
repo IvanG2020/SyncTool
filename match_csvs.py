@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame
+from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame, Checkbutton, IntVar
 import requests
 import threading
 
@@ -18,11 +18,14 @@ config = {
 # Global log list to track sync changes and their original states for undo
 sync_log = []
 undo_actions = []
+selected_cases = []
 
 def fetch_netsuite_cases():
-    # Your code to fetch cases from NetSuite
+    # Example mock data, replace with real API call to NetSuite
     return [
-        {"id": 123, "title": "Sample Case", "status": "Open"}
+        {"id": 123, "title": "Sample Case 1", "status": "Open"},
+        {"id": 124, "title": "Sample Case 2", "status": "Open"},
+        {"id": 125, "title": "Sample Case 3", "status": "Closed"}
     ]
 
 def fetch_azure_work_items():
@@ -129,6 +132,20 @@ def sync_cases():
     except Exception as e:
         show_sync_result("Sync Failed", f"An error occurred during sync: {str(e)}")
 
+def sync_selected_cases():
+    try:
+        sync_log.clear()  # Clear the log before starting a new sync
+        undo_actions.clear()  # Clear undo actions list before a new sync
+
+        show_loading_screen()  # Show loading screen only after selection
+
+        for case in selected_cases:
+            create_or_update_azure_work_item(case)
+
+        show_sync_result("Sync Complete", "The selected cases have been synced successfully.")
+    except Exception as e:
+        show_sync_result("Sync Failed", f"An error occurred during sync: {str(e)}")
+
 def undo_sync():
     try:
         for action in reversed(undo_actions):  # Undo in reverse order
@@ -172,9 +189,12 @@ def show_sync_result(title, message):
     hide_loading_screen()
     messagebox.showinfo(title, message)
 
-def start_sync():
-    show_loading_screen()
-    threading.Thread(target=sync_cases).start()
+def start_sync(auto_sync=True):
+    if auto_sync:
+        show_loading_screen()
+        threading.Thread(target=sync_cases).start()
+    else:
+        open_case_selection_window()
 
 def save_config():
     global config
@@ -241,6 +261,57 @@ def open_api_settings():
     save_button = tk.Button(settings_window, text="Save", command=save_config, font=("Arial", 14), bg="green", fg="white")
     save_button.pack(pady=20)
 
+def open_case_selection_window():
+    cases = fetch_netsuite_cases()
+
+    selection_window = Toplevel()
+    selection_window.title("Select Cases to Sync")
+    selection_window.geometry("500x700")
+    selection_window.configure(bg="#34495e")
+
+    # Add a label to display the total number of cases fetched
+    total_cases_label = Label(selection_window, text=f"Total Cases Fetched: {len(cases)}", bg="#34495e", fg="white", font=("Arial", 12))
+    total_cases_label.pack(pady=10)
+
+    # Add a label to display the number of selected cases
+    selected_count_var = tk.StringVar()
+    selected_count_var.set(f"Selected: 0")
+    selected_count_label = Label(selection_window, textvariable=selected_count_var, bg="#34495e", fg="white", font=("Arial", 12))
+    selected_count_label.pack(pady=5)
+
+    # Create a frame to hold the listbox and scrollbar
+    list_frame = Frame(selection_window)
+    list_frame.pack(pady=10, fill=BOTH, expand=True)
+
+    # Add a scrollbar and listbox for displaying the cases
+    scrollbar = Scrollbar(list_frame)
+    scrollbar.pack(side=RIGHT, fill=Y)
+
+    case_listbox = Listbox(list_frame, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar.set, font=("Arial", 12), bg="#ecf0f1", fg="#2c3e50", height=20)
+    case_listbox.pack(side=LEFT, fill=BOTH, expand=True)
+
+    scrollbar.config(command=case_listbox.yview)
+
+    # Populate the listbox with the case information
+    for i, case in enumerate(cases):
+        case_listbox.insert(tk.END, f"Case {case['id']}: {case['title']} ({case['status']})")
+
+    # Update the selected cases count dynamically
+    def update_selected_count(event):
+        selected_count_var.set(f"Selected: {len(case_listbox.curselection())}")
+
+    case_listbox.bind('<<ListboxSelect>>', update_selected_count)
+
+    # Function to confirm selection and start the sync
+    def confirm_selection():
+        global selected_cases
+        selected_cases = [cases[i] for i in case_listbox.curselection()]
+        selection_window.destroy()
+        threading.Thread(target=sync_selected_cases).start()
+
+    tk.Button(selection_window, text="Sync Selected Cases", command=confirm_selection, bg="#2980b9", fg="white", font=("Arial", 14)).pack(pady=20)
+
+# New Function: View Sync Log
 def view_sync_log():
     log_window = Toplevel()
     log_window.title("Sync Changes Log")
@@ -261,30 +332,34 @@ def view_sync_log():
     for log_entry in sync_log:
         log_listbox.insert(tk.END, log_entry)
 
+# Main Application Window
 def create_main_window():
     window = tk.Tk()
     window.title("NetSuite & Azure DevOps Sync")
-    window.geometry("400x400")
+    window.geometry("500x450")  # Adjusted window size
     window.configure(bg="#34495e")
 
-    tk.Label(window, text="NetSuite & Azure DevOps Sync Tool", font=("Arial", 16, "bold"), bg="#34495e", fg="white").pack(pady=20)
+    tk.Label(window, text="NetSuite & Azure DevOps Sync Tool", font=("Arial", 18, "bold"), bg="#34495e", fg="white").pack(pady=20)
 
     button_frame = Frame(window, bg="#34495e")
-    button_frame.pack(pady=10)
+    button_frame.pack(pady=20)
 
-    settings_button = tk.Button(button_frame, text="API Settings", command=open_api_settings, font=("Arial", 14), bg="orange", fg="white")
+    settings_button = tk.Button(button_frame, text="API Settings", command=open_api_settings, font=("Arial", 14), bg="orange", fg="white", width=18)
     settings_button.grid(row=0, column=0, padx=10, pady=10)
 
-    sync_button = tk.Button(button_frame, text="Start Sync", command=start_sync, font=("Arial", 14), bg="green", fg="white")
+    sync_button = tk.Button(button_frame, text="Auto Sync All Cases", command=lambda: start_sync(auto_sync=True), font=("Arial", 14), bg="green", fg="white", width=18)
     sync_button.grid(row=0, column=1, padx=10, pady=10)
 
-    view_log_button = tk.Button(button_frame, text="View Sync Log", command=view_sync_log, font=("Arial", 14), bg="purple", fg="white")
-    view_log_button.grid(row=1, column=0, padx=10, pady=10)
+    select_sync_button = tk.Button(button_frame, text="Select and Sync Cases", command=lambda: start_sync(auto_sync=False), font=("Arial", 14), bg="blue", fg="white", width=18)
+    select_sync_button.grid(row=1, column=0, padx=10, pady=10)
 
-    undo_button = tk.Button(button_frame, text="Undo Last Sync", command=undo_sync, font=("Arial", 14), bg="red", fg="white")
-    undo_button.grid(row=1, column=1, padx=10, pady=10)
+    view_log_button = tk.Button(button_frame, text="View Sync Log", command=view_sync_log, font=("Arial", 14), bg="purple", fg="white", width=18)
+    view_log_button.grid(row=1, column=1, padx=10, pady=10)
 
-    exit_button = tk.Button(window, text="Exit", command=window.quit, font=("Arial", 14), bg="red", fg="white")
+    undo_button = tk.Button(button_frame, text="Undo Last Sync", command=undo_sync, font=("Arial", 14), bg="red", fg="white", width=18)
+    undo_button.grid(row=2, column=0, padx=10, pady=10)
+
+    exit_button = tk.Button(window, text="Exit", command=window.quit, font=("Arial", 14), bg="red", fg="white", width=18)
     exit_button.pack(pady=20)
     
     window.mainloop()
