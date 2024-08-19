@@ -1,7 +1,18 @@
 import tkinter as tk
-from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame, Checkbutton, IntVar
+from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame, Radiobutton, IntVar
 import requests
 import threading
+
+# Status mapping between Azure DevOps and NetSuite
+status_mapping = {
+    "New": "Open",
+    "Active": "In Progress",
+    "Resolved": "Resolved",
+    "Closed": "Closed"
+}
+
+# Reverse mapping for syncing in the opposite direction
+reverse_status_mapping = {v: k for k, v in status_mapping.items()}
 
 # Default configurations (replace with your actual values or leave blank)
 config = {
@@ -50,12 +61,14 @@ def create_or_update_azure_work_item(case):
             work_item = item
             break
 
+    mapped_status = reverse_status_mapping.get(case['status'], "New")
+
     if work_item:
         if case['status'] == 'Closed' and work_item['fields']['System.State'] != 'Closed':
             original_state = work_item['fields']['System.State']
-            update_azure_work_item_status(work_item['id'], 'Closed')
+            update_azure_work_item_status(work_item['id'], mapped_status)
             undo_actions.append(("azure", work_item['id'], "System.State", original_state))
-            sync_log.append(f"Azure Work Item {work_item['id']} closed due to NetSuite case {case['id']} being closed.")
+            sync_log.append(f"Azure Work Item {work_item['id']} updated to {mapped_status} due to NetSuite case {case['id']} status change.")
     else:
         create_azure_work_item(case)
 
@@ -65,17 +78,19 @@ def create_azure_work_item(case):
         'Content-Type': 'application/json-patch+json',
         'Authorization': f'Basic {config["azure_pat"]}'
     }
-    
+
+    mapped_status = reverse_status_mapping.get(case['status'], "New")
+
     data = [
         {"op": "add", "path": "/fields/System.Title", "value": case['title']},
-        {"op": "add", "path": "/fields/System.State", "value": "New"}
+        {"op": "add", "path": "/fields/System.State", "value": mapped_status}
     ]
     
     response = requests.post(url, json=data, headers=headers)
     if response.status_code == 200:
         work_item_id = response.json().get('id')
         undo_actions.append(("azure_delete", work_item_id))  # Track creation for possible deletion
-        sync_log.append(f"Azure Work Item {work_item_id} created for NetSuite case {case['id']}.")
+        sync_log.append(f"Azure Work Item {work_item_id} created with status {mapped_status} for NetSuite case {case['id']}.")
     else:
         print(f"Failed to create work item: {response.status_code}, {response.text}")
 
@@ -97,18 +112,20 @@ def update_azure_work_item_status(work_item_id, status):
         print(f"Failed to update work item {work_item_id}: {response.status_code}, {response.text}")
 
 def update_netsuite_case_status(case_id, status):
+    mapped_status = status_mapping.get(status, "Open")
+    
     url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase/{case_id}'
     headers = {
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {config["netsuite_token_key"]}'
     }
     
-    data = {"status": {"name": status}}
+    data = {"status": {"name": mapped_status}}
     
     response = requests.patch(url, json=data, headers=headers)
     if response.status_code == 200:
-        undo_actions.append(("netsuite", case_id, "status", "Open" if status == "Closed" else "Closed"))
-        sync_log.append(f"NetSuite case {case_id} updated to {status} due to Azure Work Item.")
+        undo_actions.append(("netsuite", case_id, "status", "Open" if mapped_status == "Closed" else "Closed"))
+        sync_log.append(f"NetSuite case {case_id} updated to {mapped_status} due to Azure Work Item status change.")
     else:
         print(f"Failed to update NetSuite case {case_id}: {response.status_code}, {response.text}")
 
@@ -116,17 +133,18 @@ def sync_cases():
     try:
         sync_log.clear()  # Clear the log before starting a new sync
         undo_actions.clear()  # Clear undo actions list before a new sync
-        netsuite_cases = fetch_netsuite_cases()
-        azure_work_items = fetch_azure_work_items()
         
-        for case in netsuite_cases:
-            create_or_update_azure_work_item(case)
-
-        for work_item in azure_work_items:
-            corresponding_case = next((c for c in netsuite_cases if c['title'] == work_item['fields']['System.Title']), None)
-            if corresponding_case:
-                if work_item['fields']['System.State'] == 'Closed' and corresponding_case['status'] != 'Closed':
-                    update_netsuite_case_status(corresponding_case['id'], 'Closed')
+        if sync_direction.get() == 1:  # NetSuite to DevOps
+            netsuite_cases = fetch_netsuite_cases()
+            for case in netsuite_cases:
+                create_or_update_azure_work_item(case)
+        elif sync_direction.get() == 2:  # DevOps to NetSuite
+            azure_work_items = fetch_azure_work_items()
+            for work_item in azure_work_items:
+                corresponding_case = next((c for c in selected_cases if c['title'] == work_item['fields']['System.Title']), None)
+                if corresponding_case:
+                    if work_item['fields']['System.State'] == 'Closed' and corresponding_case['status'] != 'Closed':
+                        update_netsuite_case_status(corresponding_case['id'], work_item['fields']['System.State'])
 
         show_sync_result("Sync Complete", "The sync process has completed successfully.")
     except Exception as e:
@@ -139,8 +157,12 @@ def sync_selected_cases():
 
         show_loading_screen()  # Show loading screen only after selection
 
-        for case in selected_cases:
-            create_or_update_azure_work_item(case)
+        if sync_direction.get() == 1:  # NetSuite to DevOps
+            for case in selected_cases:
+                create_or_update_azure_work_item(case)
+        elif sync_direction.get() == 2:  # DevOps to NetSuite
+            for case in selected_cases:
+                update_netsuite_case_status(case['id'], 'Closed')  # Example logic, adjust as needed
 
         show_sync_result("Sync Complete", "The selected cases have been synced successfully.")
     except Exception as e:
@@ -262,15 +284,58 @@ def open_api_settings():
     save_button.pack(pady=20)
 
 def open_case_selection_window():
-    cases = fetch_netsuite_cases()
+    global cases  # Declare cases as a global variable
+    cases = []  # Initialize cases as an empty list
 
+    def fetch_cases():
+        global cases  # Refer to the global cases variable
+        # Fetch cases based on the selected source
+        if fetch_source.get() == 1:  # NetSuite
+            cases = fetch_netsuite_cases()
+        else:  # Azure DevOps
+            cases = fetch_azure_work_items()
+
+        if not cases:  # Check if no cases were fetched
+            messagebox.showerror("Fetch Failed", "No cases were found from the selected source.")
+            return
+
+        # Clear the listbox and repopulate it with the fetched cases
+        case_listbox.delete(0, tk.END)
+        for i, case in enumerate(cases):
+            title = case['title'] if fetch_source.get() == 1 else case['fields']['System.Title']
+            status = case['status'] if fetch_source.get() == 1 else case['fields']['System.State']
+            case_listbox.insert(tk.END, f"Case {case['id']}: {title} ({status})")
+
+        # Update the total cases label
+        total_cases_label.config(text=f"Total Cases Fetched: {len(cases)}")
+        selected_count_var.set(f"Selected: 0")
+
+    # Window setup
     selection_window = Toplevel()
     selection_window.title("Select Cases to Sync")
-    selection_window.geometry("500x700")
+    selection_window.geometry("500x600")
     selection_window.configure(bg="#34495e")
 
+    # Radio buttons to select fetch source
+    fetch_source = IntVar(value=1)  # Default to NetSuite
+
+    source_frame = Frame(selection_window, bg="#34495e")
+    source_frame.pack(pady=10)
+
+    tk.Label(source_frame, text="Select Source:", bg="#34495e", fg="white", font=("Arial", 14)).pack()
+
+    netsuite_rb = Radiobutton(source_frame, text="NetSuite", variable=fetch_source, value=1, bg="#34495e", fg="white", font=("Arial", 12))
+    netsuite_rb.pack(side=tk.LEFT, padx=10, pady=10)
+
+    azure_rb = Radiobutton(source_frame, text="Azure DevOps", variable=fetch_source, value=2, bg="#34495e", fg="white", font=("Arial", 12))
+    azure_rb.pack(side=tk.LEFT, padx=10, pady=10)
+
+    # Fetch Cases Button
+    fetch_button = tk.Button(selection_window, text="Fetch Cases", command=fetch_cases, bg="#2980b9", fg="white", font=("Arial", 14))
+    fetch_button.pack(pady=10)
+
     # Add a label to display the total number of cases fetched
-    total_cases_label = Label(selection_window, text=f"Total Cases Fetched: {len(cases)}", bg="#34495e", fg="white", font=("Arial", 12))
+    total_cases_label = Label(selection_window, text="Total Cases Fetched: 0", bg="#34495e", fg="white", font=("Arial", 12))
     total_cases_label.pack(pady=10)
 
     # Add a label to display the number of selected cases
@@ -293,10 +358,6 @@ def open_case_selection_window():
     scrollbar.config(command=case_listbox.yview)
 
     # Populate the listbox with the case information
-    for i, case in enumerate(cases):
-        case_listbox.insert(tk.END, f"Case {case['id']}: {case['title']} ({case['status']})")
-
-    # Update the selected cases count dynamically
     def update_selected_count(event):
         selected_count_var.set(f"Selected: {len(case_listbox.curselection())}")
 
@@ -310,6 +371,77 @@ def open_case_selection_window():
         threading.Thread(target=sync_selected_cases).start()
 
     tk.Button(selection_window, text="Sync Selected Cases", command=confirm_selection, bg="#2980b9", fg="white", font=("Arial", 14)).pack(pady=20)
+
+# Function to open the report generation window
+def open_report_window():
+    report_window = Toplevel()
+    report_window.title("Generate Company Report")
+    report_window.geometry("500x400")
+    report_window.configure(bg="#34495e")
+
+    Label(report_window, text="Select Companies:", bg="#34495e", fg="white", font=("Arial", 14)).pack(pady=10)
+
+    # Listbox for selecting companies
+    company_listbox = Listbox(report_window, selectmode=tk.MULTIPLE, font=("Arial", 12), bg="#ecf0f1", fg="#2c3e50")
+    company_listbox.pack(pady=10, fill=BOTH, expand=True)
+
+    # Example companies - replace with actual data
+    companies = ["Company A", "Company B", "Company C", "Company D"]
+    for company in companies:
+        company_listbox.insert(tk.END, company)
+
+    def generate_report():
+        selected_companies = [company_listbox.get(i) for i in company_listbox.curselection()]
+        if not selected_companies:
+            messagebox.showerror("Error", "Please select at least one company.")
+            return
+
+        tickets = fetch_netsuite_tickets_by_companies(selected_companies)
+        if not tickets:
+            messagebox.showinfo("No Tickets", "No open tickets found for the selected companies.")
+            return
+
+        display_tickets(tickets)
+
+    generate_button = tk.Button(report_window, text="Generate Report", command=generate_report, bg="#2980b9", fg="white", font=("Arial", 14))
+    generate_button.pack(pady=20)
+
+def fetch_netsuite_tickets_by_companies(selected_companies):
+    # Replace with real API calls to NetSuite
+    all_tickets = [
+        {"id": 123, "company": "Company A", "title": "Sample Case 1", "status": "Open"},
+        {"id": 124, "company": "Company B", "title": "Sample Case 2", "status": "Open"},
+        {"id": 125, "company": "Company A", "title": "Sample Case 3", "status": "Closed"},
+        {"id": 126, "company": "Company C", "title": "Sample Case 4", "status": "Open"}
+    ]
+
+    return [ticket for ticket in all_tickets if ticket['company'] in selected_companies and ticket['status'] == "Open"]
+
+def display_tickets(tickets):
+    report_display_window = Toplevel()
+    report_display_window.title("Open Tickets Report")
+    report_display_window.geometry("600x400")
+    report_display_window.configure(bg="#34495e")
+
+    Label(report_display_window, text="Open Tickets", bg="#34495e", fg="white", font=("Arial", 14)).pack(pady=10)
+
+    listbox = Listbox(report_display_window, font=("Arial", 12), bg="#ecf0f1", fg="#2c3e50")
+    listbox.pack(fill=BOTH, expand=True)
+
+    for ticket in tickets:
+        listbox.insert(tk.END, f"ID: {ticket['id']} | Company: {ticket['company']} | Title: {ticket['title']}")
+
+    def export_to_csv():
+        import csv
+        with open("company_tickets_report.csv", "w", newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["ID", "Company", "Title", "Status"])
+            for ticket in tickets:
+                writer.writerow([ticket['id'], ticket['company'], ticket['title'], ticket['status']])
+        messagebox.showinfo("Export Successful", "Report exported to company_tickets_report.csv")
+
+    export_button = tk.Button(report_display_window, text="Export to CSV", command=export_to_csv, bg="green", fg="white", font=("Arial", 14))
+    export_button.pack(pady=10)
 
 # New Function: View Sync Log
 def view_sync_log():
@@ -334,15 +466,30 @@ def view_sync_log():
 
 # Main Application Window
 def create_main_window():
+    global sync_direction
+
     window = tk.Tk()
     window.title("NetSuite & Azure DevOps Sync")
-    window.geometry("500x450")  # Adjusted window size
+    window.geometry("500x500")  # Adjusted window size
     window.configure(bg="#34495e")
+
+    sync_direction = IntVar(value=1)  # Default to NetSuite to DevOps
 
     tk.Label(window, text="NetSuite & Azure DevOps Sync Tool", font=("Arial", 18, "bold"), bg="#34495e", fg="white").pack(pady=20)
 
     button_frame = Frame(window, bg="#34495e")
-    button_frame.pack(pady=20)
+    button_frame.pack(pady=10)
+
+    # Sync Direction Radiobuttons
+    direction_frame = Frame(window, bg="#34495e")
+    direction_frame.pack(pady=10)
+    tk.Label(direction_frame, text="Select Sync Direction:", bg="#34495e", fg="white", font=("Arial", 14)).grid(row=0, column=0, columnspan=2, pady=5)
+
+    netsuite_to_devops_rb = Radiobutton(direction_frame, text="NetSuite to Azure DevOps", variable=sync_direction, value=1, bg="#34495e", fg="white", font=("Arial", 12))
+    netsuite_to_devops_rb.grid(row=1, column=0, padx=5, pady=5)
+
+    devops_to_netsuite_rb = Radiobutton(direction_frame, text="Azure DevOps to NetSuite", variable=sync_direction, value=2, bg="#34495e", fg="white", font=("Arial", 12))
+    devops_to_netsuite_rb.grid(row=1, column=1, padx=5, pady=5)
 
     settings_button = tk.Button(button_frame, text="API Settings", command=open_api_settings, font=("Arial", 14), bg="orange", fg="white", width=18)
     settings_button.grid(row=0, column=0, padx=10, pady=10)
@@ -356,8 +503,11 @@ def create_main_window():
     view_log_button = tk.Button(button_frame, text="View Sync Log", command=view_sync_log, font=("Arial", 14), bg="purple", fg="white", width=18)
     view_log_button.grid(row=1, column=1, padx=10, pady=10)
 
+    report_button = tk.Button(button_frame, text="Generate Report", command=open_report_window, font=("Arial", 14), bg="gold", fg="black", width=18)
+    report_button.grid(row=2, column=0, padx=10, pady=10)
+
     undo_button = tk.Button(button_frame, text="Undo Last Sync", command=undo_sync, font=("Arial", 14), bg="red", fg="white", width=18)
-    undo_button.grid(row=2, column=0, padx=10, pady=10)
+    undo_button.grid(row=2, column=1, padx=10, pady=10)
 
     exit_button = tk.Button(window, text="Exit", command=window.quit, font=("Arial", 14), bg="red", fg="white", width=18)
     exit_button.pack(pady=20)
