@@ -41,12 +41,12 @@ Before you begin, ensure you have the following:
 2. **Install Required Packages:**
    - Navigate to the project directory:
      ```bash
-     cd netsuite-azure-sync
+     cd 
      ```
    - Install the necessary Python packages:
      ```bash
      pip install requests
-     pip install tkinter
+     pip install tk
      ```
 
 ### **Configuration**
@@ -68,7 +68,7 @@ Before running the tool, you need to configure your NetSuite and Azure DevOps AP
 1. **Open the Sync Tool:**
    - Run the Python script to start the tool:
      ```bash
-     python sync_tool.py
+     python match_csvs.py
      ```
    - The main window will appear with options to configure API settings, start the sync, view logs, and undo the last sync.
 
