@@ -23,7 +23,8 @@ config = {
     "netsuite_token_secret": '',
     "azure_org": '',
     "azure_project": '',
-    "azure_pat": ''
+    "azure_pat": '',
+    "teams_webhook_url": ''  # Add Teams webhook URL here
 }
 
 # Global log list to track sync changes and their original states for undo
@@ -77,6 +78,7 @@ def create_or_update_azure_work_item(case):
             update_azure_work_item_status(work_item['id'], mapped_status)
             undo_actions.append(("azure", work_item['id'], "System.State", original_state))
             sync_log.append(f"Azure Work Item {work_item['id']} updated to {mapped_status} due to NetSuite case {case['id']} status change.")
+            post_to_teams(work_item, mapped_status)  # Post update to Teams
     else:
         create_azure_work_item(case)
 
@@ -99,6 +101,7 @@ def create_azure_work_item(case):
         work_item_id = response.json().get('id')
         undo_actions.append(("azure_delete", work_item_id))  # Track creation for possible deletion
         sync_log.append(f"Azure Work Item {work_item_id} created with status {mapped_status} for NetSuite case {case['id']}.")
+        post_to_teams(case, mapped_status)  # Post creation to Teams
     else:
         print(f"Failed to create work item: {response.status_code}, {response.text}")
 
@@ -136,6 +139,21 @@ def update_netsuite_case_status(case_id, status):
         sync_log.append(f"NetSuite case {case_id} updated to {mapped_status} due to Azure Work Item status change.")
     else:
         print(f"Failed to update NetSuite case {case_id}: {response.status_code}, {response.text}")
+
+def post_to_teams(case, status):
+    if not config["teams_webhook_url"]:
+        print("Teams webhook URL not configured.")
+        return
+
+    message = {
+        "text": f"Ticket ID: {case['id']} | Title: {case['title']} | Status: {status} has been updated in Azure DevOps."
+    }
+    
+    response = requests.post(config["teams_webhook_url"], json=message)
+    if response.status_code == 200:
+        print("Posted update to Teams successfully.")
+    else:
+        print(f"Failed to post update to Teams: {response.status_code}, {response.text}")
 
 def sync_cases():
     try:
@@ -236,17 +254,18 @@ def save_config():
     config["azure_org"] = azure_org_entry.get()
     config["azure_project"] = azure_project_entry.get()
     config["azure_pat"] = azure_pat_entry.get()
+    config["teams_webhook_url"] = teams_webhook_url_entry.get()
 
     messagebox.showinfo("Configuration Saved", "API Keys and configuration have been saved.")
 
 def open_api_settings():
     settings_window = Toplevel()
     settings_window.title("API Settings")
-    settings_window.geometry("500x500")
+    settings_window.geometry("500x600")
     settings_window.configure(bg="#2c3e50")
 
     global netsuite_account_entry, netsuite_consumer_key_entry, netsuite_consumer_secret_entry, netsuite_token_key_entry, netsuite_token_secret_entry
-    global azure_org_entry, azure_project_entry, azure_pat_entry
+    global azure_org_entry, azure_project_entry, azure_pat_entry, teams_webhook_url_entry
 
     Label(settings_window, text="NetSuite Account ID:", fg="white", bg="#2c3e50").pack(pady=5)
     netsuite_account_entry = tk.Entry(settings_window, width=40)
@@ -287,6 +306,11 @@ def open_api_settings():
     azure_pat_entry = tk.Entry(settings_window, width=40, show="*")
     azure_pat_entry.pack()
     azure_pat_entry.insert(0, config["azure_pat"])
+
+    Label(settings_window, text="Microsoft Teams Webhook URL:", fg="white", bg="#2c3e50").pack(pady=5)
+    teams_webhook_url_entry = tk.Entry(settings_window, width=40)
+    teams_webhook_url_entry.pack()
+    teams_webhook_url_entry.insert(0, config["teams_webhook_url"])
 
     save_button = tk.Button(settings_window, text="Save", command=save_config, font=("Arial", 14), bg="green", fg="white")
     save_button.pack(pady=20)
@@ -477,7 +501,7 @@ def create_main_window():
 
     window = tk.Tk()
     window.title("NetSuite & Azure DevOps Sync")
-    window.geometry("500x500")  # Adjusted window size
+    window.geometry("500x600")  # Adjusted window size
     window.configure(bg="#34495e")
 
     sync_direction = IntVar(value=1)  # Default to NetSuite to DevOps
