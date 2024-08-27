@@ -1,18 +1,35 @@
 import tkinter as tk
-from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame, Radiobutton, IntVar
+from tkinter import messagebox, Toplevel, Label, Listbox, Scrollbar, RIGHT, Y, LEFT, BOTH, Frame, Radiobutton, IntVar, Checkbutton, BooleanVar
 import requests
 import threading
 
-# Status mapping between Azure DevOps and NetSuite
-status_mapping = {
-    "New": "Open",
-    "Active": "In Progress",
-    "Resolved": "Resolved",
-    "Closed": "Closed"
+# Status mapping between Azure DevOps and NetSuite by ticket type
+ticket_type_mapping = {
+    "Enhancement": {
+        "New": "Open",
+        "Active": "In Progress",
+        "Resolved": "Resolved",
+        "Closed": "Closed"
+    },
+    "Bug": {
+        "New": "Open",
+        "Active": "In Progress",
+        "Resolved": "Fixed",
+        "Closed": "Closed"
+    },
+    "User Story": {
+        "New": "Open",
+        "Active": "In Progress",
+        "Resolved": "Completed",
+        "Closed": "Closed"
+    }
 }
 
 # Reverse mapping for syncing in the opposite direction
-reverse_status_mapping = {v: k for k, v in status_mapping.items()}
+reverse_ticket_type_mapping = {
+    ticket_type: {v: k for k, v in status_mapping.items()} 
+    for ticket_type, status_mapping in ticket_type_mapping.items()
+}
 
 # Default configurations (replace with your actual values or leave blank)
 config = {
@@ -24,7 +41,8 @@ config = {
     "azure_org": '',
     "azure_project": '',
     "azure_pat": '',
-    "teams_webhook_url": ''  # Add Teams webhook URL here
+    "teams_webhook_url": '',  # Add Teams webhook URL here
+    "teams_notifications_enabled": True  # Initial state for Teams notifications
 }
 
 # Global log list to track sync changes and their original states for undo
@@ -32,115 +50,19 @@ sync_log = []
 undo_actions = []
 selected_cases = []
 
-def fetch_netsuite_cases():
-    url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase'
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {config["netsuite_token_key"]}'
-    }
+def enable_teams_notifications():
+    config["teams_notifications_enabled"] = True
+    print("Teams notifications enabled.")
 
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        cases = response.json().get('items', [])
-        return [{"id": case["id"], "title": case["title"], "status": case["status"]["name"]} for case in cases]
-    else:
-        print(f"Failed to fetch NetSuite cases: {response.status_code}, {response.text}")
-        return []
-
-def fetch_azure_work_items():
-    url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems?api-version=6.0'
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Basic {config["azure_pat"]}'
-    }
-    
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        work_items = response.json().get('value', [])
-        return [{"id": item["id"], "title": item["fields"]["System.Title"], "status": item["fields"]["System.State"]} for item in work_items]
-    else:
-        print(f"Failed to fetch work items: {response.status_code}, {response.text}")
-        return []
-
-def create_or_update_azure_work_item(case):
-    work_item = None
-    azure_work_items = fetch_azure_work_items()
-    for item in azure_work_items:
-        if item['title'] == case['title']:
-            work_item = item
-            break
-
-    mapped_status = reverse_status_mapping.get(case['status'], "New")
-
-    if work_item:
-        if case['status'] == 'Closed' and work_item['status'] != 'Closed':
-            original_state = work_item['status']
-            update_azure_work_item_status(work_item['id'], mapped_status)
-            undo_actions.append(("azure", work_item['id'], "System.State", original_state))
-            sync_log.append(f"Azure Work Item {work_item['id']} updated to {mapped_status} due to NetSuite case {case['id']} status change.")
-            post_to_teams(work_item, mapped_status)  # Post update to Teams
-    else:
-        create_azure_work_item(case)
-
-def create_azure_work_item(case):
-    url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems?api-version=6.0'
-    headers = {
-        'Content-Type': 'application/json-patch+json',
-        'Authorization': f'Basic {config["azure_pat"]}'
-    }
-
-    mapped_status = reverse_status_mapping.get(case['status'], "New")
-
-    data = [
-        {"op": "add", "path": "/fields/System.Title", "value": case['title']},
-        {"op": "add", "path": "/fields/System.State", "value": mapped_status}
-    ]
-    
-    response = requests.post(url, json=data, headers=headers)
-    if response.status_code == 200:
-        work_item_id = response.json().get('id')
-        undo_actions.append(("azure_delete", work_item_id))  # Track creation for possible deletion
-        sync_log.append(f"Azure Work Item {work_item_id} created with status {mapped_status} for NetSuite case {case['id']}.")
-        post_to_teams(case, mapped_status)  # Post creation to Teams
-    else:
-        print(f"Failed to create work item: {response.status_code}, {response.text}")
-
-def update_azure_work_item_status(work_item_id, status):
-    url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems/{work_item_id}?api-version=6.0'
-    headers = {
-        'Content-Type': 'application/json-patch+json',
-        'Authorization': f'Basic {config["azure_pat"]}'
-    }
-    
-    data = [
-        {"op": "add", "path": "/fields/System.State", "value": status}
-    ]
-    
-    response = requests.patch(url, json=data, headers=headers)
-    if response.status_code == 200:
-        sync_log.append(f"Azure Work Item {work_item_id} updated to {status}.")
-    else:
-        print(f"Failed to update work item {work_item_id}: {response.status_code}, {response.text}")
-
-def update_netsuite_case_status(case_id, status):
-    mapped_status = status_mapping.get(status, "Open")
-    
-    url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase/{case_id}'
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {config["netsuite_token_key"]}'
-    }
-    
-    data = {"status": {"name": mapped_status}}
-    
-    response = requests.patch(url, json=data, headers=headers)
-    if response.status_code == 200:
-        undo_actions.append(("netsuite", case_id, "status", "Open" if mapped_status == "Closed" else "Closed"))
-        sync_log.append(f"NetSuite case {case_id} updated to {mapped_status} due to Azure Work Item status change.")
-    else:
-        print(f"Failed to update NetSuite case {case_id}: {response.status_code}, {response.text}")
+def disable_teams_notifications():
+    config["teams_notifications_enabled"] = False
+    print("Teams notifications disabled.")
 
 def post_to_teams(case, status):
+    if not config["teams_notifications_enabled"]:
+        print("Teams notifications are disabled.")
+        return
+
     if not config["teams_webhook_url"]:
         print("Teams webhook URL not configured.")
         return
@@ -154,6 +76,133 @@ def post_to_teams(case, status):
         print("Posted update to Teams successfully.")
     else:
         print(f"Failed to post update to Teams: {response.status_code}, {response.text}")
+
+def map_status(ticket_type, status):
+    """Map status based on ticket type."""
+    if ticket_type in ticket_type_mapping:
+        return ticket_type_mapping[ticket_type].get(status, "Open")
+    else:
+        return ticket_type_mapping["Enhancement"].get(status, "Open")  # Default to Enhancement
+
+def reverse_map_status(ticket_type, status):
+    """Map status in reverse direction based on ticket type."""
+    if ticket_type in reverse_ticket_type_mapping:
+        return reverse_ticket_type_mapping[ticket_type].get(status, "New")
+    else:
+        return reverse_ticket_type_mapping["Enhancement"].get(status, "New")  # Default to Enhancement
+
+def fetch_netsuite_cases():
+    try:
+        url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {config["netsuite_token_key"]}'
+        }
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        cases = response.json().get('items', [])
+        return [{"id": case["id"], "title": case["title"], "status": case["status"]["name"], "type": case.get("type", "Enhancement")} for case in cases]
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Fetch Error", f"Failed to fetch NetSuite cases: {str(e)}")
+        return []
+
+def fetch_azure_work_items():
+    try:
+        url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems?api-version=6.0'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Basic {config["azure_pat"]}'
+        }
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        work_items = response.json().get('value', [])
+        return [{"id": item["id"], "title": item["fields"]["System.Title"], "status": item["fields"]["System.State"]} for item in work_items]
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Fetch Error", f"Failed to fetch Azure DevOps work items: {str(e)}")
+        return []
+
+def create_or_update_azure_work_item(case):
+    work_item = None
+    azure_work_items = fetch_azure_work_items()
+    for item in azure_work_items:
+        if item['title'] == case['title']:
+            work_item = item
+            break
+
+    ticket_type = case.get('type', 'Enhancement')  # Assume Enhancement if not specified
+    mapped_status = reverse_map_status(ticket_type, case['status'])
+
+    if work_item:
+        if case['status'] == 'Closed' and work_item['status'] != 'Closed':
+            original_state = work_item['status']
+            update_azure_work_item_status(work_item['id'], mapped_status)
+            undo_actions.append(("azure", work_item['id'], "System.State", original_state))
+            sync_log.append(f"Azure Work Item {work_item['id']} updated to {mapped_status} due to NetSuite case {case['id']} status change.")
+            post_to_teams(work_item, mapped_status)
+    else:
+        create_azure_work_item(case)
+
+def create_azure_work_item(case):
+    url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems?api-version=6.0'
+    headers = {
+        'Content-Type': 'application/json-patch+json',
+        'Authorization': f'Basic {config["azure_pat"]}'
+    }
+
+    ticket_type = case.get('type', 'Enhancement')  # Assume Enhancement if not specified
+    mapped_status = reverse_map_status(ticket_type, case['status'])
+
+    data = [
+        {"op": "add", "path": "/fields/System.Title", "value": case['title']},
+        {"op": "add", "path": "/fields/System.State", "value": mapped_status}
+    ]
+    
+    response = requests.post(url, json=data, headers=headers)
+    if response.status_code == 200:
+        work_item_id = response.json().get('id')
+        undo_actions.append(("azure_delete", work_item_id))  # Track creation for possible deletion
+        sync_log.append(f"Azure Work Item {work_item_id} created with status {mapped_status} for NetSuite case {case['id']}.")
+        post_to_teams(case, mapped_status)
+    else:
+        print(f"Failed to create work item: {response.status_code}, {response.text}")
+
+def update_azure_work_item_status(work_item_id, status):
+    try:
+        url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems/{work_item_id}?api-version=6.0'
+        headers = {
+            'Content-Type': 'application/json-patch+json',
+            'Authorization': f'Basic {config["azure_pat"]}'
+        }
+        
+        data = [
+            {"op": "add", "path": "/fields/System.State", "value": status}
+        ]
+        
+        response = requests.patch(url, json=data, headers=headers)
+        response.raise_for_status()
+        sync_log.append(f"Azure Work Item {work_item_id} updated to {status}.")
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Update Error", f"Failed to update Azure Work Item {work_item_id}: {str(e)}")
+
+def update_netsuite_case_status(case_id, status):
+    try:
+        ticket_type = "Enhancement"  # You can pass the actual ticket type if available
+        mapped_status = map_status(ticket_type, status)
+        
+        url = f'https://YOUR_ACCOUNT.suitetalk.api.netsuite.com/services/rest/record/v1/supportCase/{case_id}'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {config["netsuite_token_key"]}'
+        }
+        
+        data = {"status": {"name": mapped_status}}
+        
+        response = requests.patch(url, json=data, headers=headers)
+        response.raise_for_status()
+        undo_actions.append(("netsuite", case_id, "status", "Open" if mapped_status == "Closed" else "Closed"))
+        sync_log.append(f"NetSuite case {case_id} updated to {mapped_status} due to Azure Work Item status change.")
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Update Error", f"Failed to update NetSuite case {case_id}: {str(e)}")
 
 def sync_cases():
     try:
@@ -209,17 +258,20 @@ def undo_sync():
         messagebox.showerror("Undo Failed", f"An error occurred while undoing sync: {str(e)}")
 
 def delete_azure_work_item(work_item_id):
-    url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems/{work_item_id}?api-version=6.0'
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Basic {config["azure_pat"]}'
-    }
-    
-    response = requests.delete(url, headers=headers)
-    if response.status_code == 204:
-        sync_log.append(f"Azure Work Item {work_item_id} deleted.")
-    else:
-        print(f"Failed to delete work item {work_item_id}: {response.status_code}, {response.text}")
+    try:
+        url = f'https://dev.azure.com/{config["azure_org"]}/{config["azure_project"]}/_apis/wit/workitems/{work_item_id}?api-version=6.0'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Basic {config["azure_pat"]}'
+        }
+        
+        response = requests.delete(url, headers=headers)
+        if response.status_code == 204:
+            sync_log.append(f"Azure Work Item {work_item_id} deleted.")
+        else:
+            print(f"Failed to delete work item {work_item_id}: {response.status_code}, {response.text}")
+    except requests.exceptions.RequestException as e:
+        messagebox.showerror("Delete Error", f"Failed to delete Azure Work Item {work_item_id}: {str(e)}")
 
 def show_loading_screen():
     global loading_screen
@@ -256,6 +308,11 @@ def save_config():
     config["azure_pat"] = azure_pat_entry.get()
     config["teams_webhook_url"] = teams_webhook_url_entry.get()
 
+    if teams_notifications_var.get():
+        enable_teams_notifications()
+    else:
+        disable_teams_notifications()
+
     messagebox.showinfo("Configuration Saved", "API Keys and configuration have been saved.")
 
 def open_api_settings():
@@ -265,7 +322,7 @@ def open_api_settings():
     settings_window.configure(bg="#2c3e50")
 
     global netsuite_account_entry, netsuite_consumer_key_entry, netsuite_consumer_secret_entry, netsuite_token_key_entry, netsuite_token_secret_entry
-    global azure_org_entry, azure_project_entry, azure_pat_entry, teams_webhook_url_entry
+    global azure_org_entry, azure_project_entry, azure_pat_entry, teams_webhook_url_entry, teams_notifications_var
 
     Label(settings_window, text="NetSuite Account ID:", fg="white", bg="#2c3e50").pack(pady=5)
     netsuite_account_entry = tk.Entry(settings_window, width=40)
@@ -311,6 +368,17 @@ def open_api_settings():
     teams_webhook_url_entry = tk.Entry(settings_window, width=40)
     teams_webhook_url_entry.pack()
     teams_webhook_url_entry.insert(0, config["teams_webhook_url"])
+
+    teams_notifications_var = BooleanVar(value=config["teams_notifications_enabled"])
+    
+    # Toggle switch for enabling/disabling Teams notifications
+    toggle_frame = Frame(settings_window, bg="#2c3e50")
+    toggle_frame.pack(pady=10)
+    toggle_label = Label(toggle_frame, text="Teams Notifications", fg="white", bg="#2c3e50", font=("Arial", 12))
+    toggle_label.pack(side=LEFT, padx=10)
+
+    toggle_switch = Checkbutton(toggle_frame, text="Enabled", variable=teams_notifications_var, fg="white", bg="#2c3e50", font=("Arial", 12))
+    toggle_switch.pack(side=LEFT)
 
     save_button = tk.Button(settings_window, text="Save", command=save_config, font=("Arial", 14), bg="green", fg="white")
     save_button.pack(pady=20)
